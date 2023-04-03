@@ -5,6 +5,8 @@ and may not be redistributed without written permission.*/
 #include <SDL.h>
 #include <stdio.h>
 #include <string>
+#include <unordered_map>
+#include <memory>
 
 enum KeyPressSurfaces {
 	KEY_PRESS_SURFACE_DEFAULT,
@@ -13,6 +15,88 @@ enum KeyPressSurfaces {
 	KEY_PRESS_SURFACE_LEFT,
 	KEY_PRESS_SURFACE_RIGHT,
 	KEY_PRESS_SURFACE_TOTAL
+};
+
+class Command {	
+	SDL_Surface* loadSurface(std::string path) {
+		SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
+		if (!loadedSurface)
+		{
+			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+		}
+		return loadedSurface;
+	}
+
+protected:
+	SDL_Surface* m_surface;
+
+public:
+	SDL_Surface* getSurface()const {
+		return m_surface;
+	}
+	Command(std::string path) : m_surface(loadSurface(path)){}
+	virtual ~Command(){}
+	virtual void execute(SDL_Surface* screenSurface) {
+		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
+	}
+	
+};
+
+class UpCommand : public Command {
+protected:
+	SDL_Surface* m_surface;
+public:
+
+	UpCommand(std::string path) : Command(path) {}
+	UpCommand(UpCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
+		other.m_surface = nullptr;
+	}
+	void execute(SDL_Surface* screenSurface) override {
+		Command::execute(screenSurface);
+		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
+	}
+};
+
+class DownCommand : public Command {
+protected:
+	SDL_Surface* m_surface;
+public:
+	DownCommand(std::string path) : Command(path) {}
+	DownCommand(DownCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
+		other.m_surface = nullptr;
+	}
+	void execute(SDL_Surface* screenSurface) override {
+		Command::execute(screenSurface);
+		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
+	}
+};
+
+class LeftCommand : public Command {
+protected:
+	SDL_Surface* m_surface;
+public:
+	LeftCommand(std::string path) : Command(path) {}
+	LeftCommand(LeftCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
+		other.m_surface = nullptr;
+	}
+	void execute(SDL_Surface* screenSurface) override {
+		Command::execute(screenSurface);
+		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
+	}
+};
+
+class RightCommand : public Command {
+protected:
+	SDL_Surface* m_surface;
+public:
+	RightCommand(std::string path) : Command(path) {}
+	RightCommand(RightCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
+		other.m_surface = nullptr;
+	}
+	void execute(SDL_Surface* screenSurface) override {
+		Command::execute(screenSurface);
+		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
+	}
 };
 
 //Starts up SDL and creates window
@@ -45,6 +129,12 @@ const int SCREEN_HEIGHT = 480;
 
 int main( int argc, char* args[] )
 {
+	std::unordered_map<SDL_Keycode, std::unique_ptr<Command>> commands;
+	commands[SDLK_UP] = std::make_unique<UpCommand>("img_for_press_test/up.bmp");
+	commands[SDLK_DOWN] = std::make_unique<DownCommand>("img_for_press_test/down.bmp");
+	commands[SDLK_LEFT] = std::make_unique<LeftCommand>("img_for_press_test/left.bmp");
+	commands[SDLK_RIGHT] = std::make_unique<RightCommand>("img_for_press_test/right.bmp");
+
 	//Start up SDL and create window
 	if (!init())
 	{
@@ -78,28 +168,11 @@ int main( int argc, char* args[] )
 					//User presses a key
 					else if (e.type == SDL_KEYDOWN)
 					{
-						//Select surfaces based on the key press
-						switch (e.key.keysym.sym)
+						auto command = commands.find(e.key.keysym.sym);
+						if (command != commands.end())
 						{
-							case SDLK_UP:
-							gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_UP];
-							break;
-
-							case SDLK_DOWN:
-							gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN];
-							break;
-
-							case SDLK_LEFT:
-							gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT];
-							break;
-
-							case SDLK_RIGHT:
-							gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT];
-							break;
-
-							default:
-							gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
-							break;
+							command->second->execute(gScreenSurface);
+							gCurrentSurface = command->second->getSurface();
 						}
 					}
 				}
