@@ -43,11 +43,9 @@ public:
 };
 
 class UpCommand : public Command {
-protected:
 	SDL_Surface* m_surface;
 public:
-
-	UpCommand(std::string path) : Command(path) {}
+	UpCommand(std::string path) : Command(path), m_surface(nullptr) {}
 	UpCommand(UpCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
 		other.m_surface = nullptr;
 	}
@@ -58,10 +56,9 @@ public:
 };
 
 class DownCommand : public Command {
-protected:
 	SDL_Surface* m_surface;
 public:
-	DownCommand(std::string path) : Command(path) {}
+	DownCommand(std::string path) : Command(path), m_surface(nullptr) {}
 	DownCommand(DownCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
 		other.m_surface = nullptr;
 	}
@@ -72,10 +69,9 @@ public:
 };
 
 class LeftCommand : public Command {
-protected:
 	SDL_Surface* m_surface;
 public:
-	LeftCommand(std::string path) : Command(path) {}
+	LeftCommand(std::string path) : Command(path), m_surface(nullptr) {}
 	LeftCommand(LeftCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
 		other.m_surface = nullptr;
 	}
@@ -86,10 +82,9 @@ public:
 };
 
 class RightCommand : public Command {
-protected:
 	SDL_Surface* m_surface;
 public:
-	RightCommand(std::string path) : Command(path) {}
+	RightCommand(std::string path) : Command(path), m_surface(nullptr) {}
 	RightCommand(RightCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
 		other.m_surface = nullptr;
 	}
