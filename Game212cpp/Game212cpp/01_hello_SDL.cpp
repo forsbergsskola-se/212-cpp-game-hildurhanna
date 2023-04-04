@@ -1,5 +1,4 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2022)
-and may not be redistributed without written permission.*/
+
 
 //Using SDL and standard IO
 #include <SDL.h>
@@ -7,6 +6,7 @@ and may not be redistributed without written permission.*/
 #include <string>
 #include <unordered_map>
 #include <memory>
+#include <stack>
 
 enum KeyPressSurfaces {
 	KEY_PRESS_SURFACE_DEFAULT,
@@ -17,7 +17,8 @@ enum KeyPressSurfaces {
 	KEY_PRESS_SURFACE_TOTAL
 };
 
-class Command {	
+class Command {
+	
 	SDL_Surface* loadSurface(std::string path) {
 		SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
 		if (!loadedSurface)
@@ -26,33 +27,47 @@ class Command {
 		}
 		return loadedSurface;
 	}
-
+	
 protected:
 	SDL_Surface* m_surface;
 
 public:
+	
+
 	SDL_Surface* getSurface()const {
 		return m_surface;
 	}
-	Command(std::string path) : m_surface(loadSurface(path)){}
-	virtual ~Command(){}
-	virtual void execute(SDL_Surface* screenSurface) {
+	
+	Command(std::string path) : m_surface(loadSurface(path)) {}
+	
+	virtual ~Command() {}
+	
+	virtual void execute(SDL_Surface* screenSurface, std::stack<std::unique_ptr<Command>>& commandStack) {
 		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
+		commandStack.push(std::make_unique<Command>(*this));
+	}
+
+	virtual void undo(SDL_Surface* screenSurface) {
+		
 	}
 	
 };
 
+
 class UpCommand : public Command {
 	SDL_Surface* m_surface;
+	
 public:
 	UpCommand(std::string path) : Command(path), m_surface(nullptr) {}
-	UpCommand(UpCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
-		other.m_surface = nullptr;
-	}
-	void execute(SDL_Surface* screenSurface) override {
-		Command::execute(screenSurface);
+	UpCommand(UpCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {}
+	void execute(SDL_Surface* screenSurface, std::stack<std::unique_ptr<Command>>& commandStack) override {
+		Command::execute(screenSurface, commandStack);
 		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
 	}
+	void undo(SDL_Surface* screenSurface) override {
+
+	}
+
 };
 
 class DownCommand : public Command {
@@ -62,8 +77,8 @@ public:
 	DownCommand(DownCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
 		other.m_surface = nullptr;
 	}
-	void execute(SDL_Surface* screenSurface) override {
-		Command::execute(screenSurface);
+	void execute(SDL_Surface* screenSurface, std::stack<std::unique_ptr<Command>>& commandStack) override {
+		Command::execute(screenSurface, commandStack);
 		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
 	}
 };
@@ -75,8 +90,8 @@ public:
 	LeftCommand(LeftCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
 		other.m_surface = nullptr;
 	}
-	void execute(SDL_Surface* screenSurface) override {
-		Command::execute(screenSurface);
+	void execute(SDL_Surface* screenSurface, std::stack<std::unique_ptr<Command>>& commandStack) override {
+		Command::execute(screenSurface, commandStack);
 		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
 	}
 };
@@ -88,8 +103,8 @@ public:
 	RightCommand(RightCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {
 		other.m_surface = nullptr;
 	}
-	void execute(SDL_Surface* screenSurface) override {
-		Command::execute(screenSurface);
+	void execute(SDL_Surface* screenSurface, std::stack<std::unique_ptr<Command>>& commandStack) override {
+		Command::execute(screenSurface, commandStack);
 		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
 	}
 };
@@ -150,6 +165,7 @@ int main( int argc, char* args[] )
 			SDL_Event e; bool quit = false;
 			//Set default current surface
 			gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
+			std::stack<std::unique_ptr<Command>> commandStack;
 			while (quit == false)
 			{
 				//Handle events on queue
@@ -166,8 +182,22 @@ int main( int argc, char* args[] )
 						auto command = commands.find(e.key.keysym.sym);
 						if (command != commands.end())
 						{
-							command->second->execute(gScreenSurface);
+							command->second->execute(gScreenSurface, commandStack);
 							gCurrentSurface = command->second->getSurface();
+
+							
+						}
+						
+					}
+					else if (e.type == SDL_KEYUP && e.key.repeat == 0)
+					{
+						if (e.key.keysym.sym == SDLK_z && (e.key.keysym.mod & KMOD_CTRL))
+						{
+							if (!commandStack.empty())
+							{
+								commandStack.top()->undo(gScreenSurface);
+								commandStack.pop();
+							}
 						}
 					}
 				}
