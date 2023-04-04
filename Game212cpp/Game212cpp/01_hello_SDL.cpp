@@ -60,6 +60,7 @@ class UpCommand : public Command {
 public:
 	UpCommand(std::string path) : Command(path), m_surface(nullptr) {}
 	UpCommand(UpCommand&& other) noexcept : Command(std::move(other)), m_surface(other.m_surface) {}
+	
 	void execute(SDL_Surface* screenSurface, std::stack<std::unique_ptr<Command>>& commandStack) override {
 		Command::execute(screenSurface, commandStack);
 		SDL_BlitSurface(m_surface, nullptr, screenSurface, nullptr);
