@@ -30,7 +30,7 @@ SDL_Window* gWindow = NULL;
 SDL_Surface* gScreenSurface = NULL;
 
 //Current displayed PNG image
-SDL_Surface* gPNGSurface = NULL;
+SDL_Surface* gStretchedSurface = NULL;
 
 bool init()
 {
@@ -67,6 +67,10 @@ bool init()
 				gScreenSurface = SDL_GetWindowSurface(gWindow);
 			}
 		}
+		
+
+		//Update the surface
+		SDL_UpdateWindowSurface(gWindow);
 	}
 
 	return success;
@@ -78,8 +82,8 @@ bool loadMedia()
 	bool success = true;
 
 	//Load PNG surface
-	gPNGSurface = loadSurface("Background_Image/nature_background.png");
-	if (gPNGSurface == NULL)
+	gStretchedSurface = loadSurface("Background_Image/nature_background.png");
+	if (gStretchedSurface == NULL)
 	{
 		printf("Failed to load PNG image!\n");
 		success = false;
@@ -91,8 +95,8 @@ bool loadMedia()
 void close()
 {
 	//Free loaded image
-	SDL_FreeSurface(gPNGSurface);
-	gPNGSurface = NULL;
+	SDL_FreeSurface(gStretchedSurface);
+	gStretchedSurface = NULL;
 
 	//Destroy window
 	SDL_DestroyWindow(gWindow);
@@ -166,7 +170,15 @@ int main(int argc, char* args[])
 				}
 
 				//Apply the PNG image
-				SDL_BlitSurface(gPNGSurface, NULL, gScreenSurface, NULL);
+				SDL_BlitSurface(gStretchedSurface, NULL, gScreenSurface, NULL);
+
+				//Apply the image stretched
+				SDL_Rect stretchRect;
+				stretchRect.x = 0;
+				stretchRect.y = 0;
+				stretchRect.w = SCREEN_WIDTH;
+				stretchRect.h = SCREEN_HEIGHT;
+				SDL_BlitScaled(gStretchedSurface, NULL, gScreenSurface, &stretchRect);
 
 				//Update the surface
 				SDL_UpdateWindowSurface(gWindow);
