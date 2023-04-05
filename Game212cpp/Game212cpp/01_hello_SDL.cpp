@@ -7,6 +7,38 @@ and may not be redistributed without written permission.*/
 #include <stdio.h>
 #include <string>
 
+//Texture wrapper class
+class LTexture {
+
+	//The actual hardware texture
+	SDL_Texture* mTexture;
+
+	//Image dimensions
+	int mWidth;
+	int mHeight;
+
+public:
+
+	//Initializes the variables 
+	LTexture();
+
+	//Deallocates memory
+	~LTexture();
+
+	//Loads image at specified path
+	bool loadFromFile(std::string path);
+
+	//Deallocates texture
+	void free();
+
+	//Renders texture at given point
+	void render(int, int y, SDL_Rect* clip = NULL);
+
+	//Gets image dimensions
+	int getWidth();
+	int getHeight();
+};
+
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -31,6 +63,12 @@ SDL_Surface* gScreenSurface = NULL;
 
 //Current displayed PNG image
 SDL_Surface* gStretchedSurface = NULL;
+
+//Scene sprites
+SDL_Rect gSpriteClips[1];
+LTexture gSpriteSheetTexture;
+
+
 
 bool init()
 {
