@@ -187,7 +187,7 @@ int main(int argc, char* args[])
 				SDL_RenderClear(gRenderer);
 
 				//Render texture to screen
-				SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
+				SDL_RenderCopy(gRenderer, gTexture, nullptr, nullptr);
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);
