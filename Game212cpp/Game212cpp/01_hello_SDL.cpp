@@ -243,6 +243,8 @@ void close()
 
 int main(int argc, char* args[])
 {
+	int foxPosX = 200;
+	int foxPosY = 300;
 	//Start up SDL and create window
 	if (!init())
 	{
@@ -274,6 +276,25 @@ int main(int argc, char* args[])
 					{
 						quit = true;
 					}
+					// Handle mouse events
+					if (e.type == SDL_MOUSEBUTTONDOWN)
+					{
+						int mouseX, mouseY;
+						SDL_GetMouseState(&mouseX, &mouseY);
+						if (mouseX >= foxPosX && mouseX < foxPosX + gFoxTexture.getWidth() && mouseY >= foxPosX && mouseY < foxPosY + gFoxTexture.getHeight())
+						{
+							printf("The fox image has been clicked down!\n");
+						}
+					}
+					else if (e.type == SDL_MOUSEBUTTONUP)
+					{
+						int mouseX, mouseY;
+						SDL_GetMouseState(&mouseX, &mouseY);
+						if (mouseX >= foxPosX && mouseX < foxPosX + gFoxTexture.getWidth() &&
+							mouseY >= foxPosY && mouseY < foxPosY + gFoxTexture.getHeight()) {
+							printf("The fox image has been released!\n");
+						}
+					}
 				}
 
 				//Clear screen
@@ -284,7 +305,7 @@ int main(int argc, char* args[])
 				gNatureBackgroundTexture.render(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				//Render Foo' to the screen
-				gFoxTexture.render(240, 190, SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
+				gFoxTexture.render(foxPosX, foxPosY, SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);
