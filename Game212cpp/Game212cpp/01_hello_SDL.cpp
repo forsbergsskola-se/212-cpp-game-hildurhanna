@@ -67,6 +67,9 @@ LTexture gNatureBackgroundTexture;
 //The music that will be played
 Mix_Music *gMusic = nullptr;
 
+//Check if the music is playing
+bool gIsMusicPlaying = false;
+
 
 LTexture::LTexture()
 {
@@ -135,10 +138,18 @@ void LTexture::free()
 	}
 }
 
-void LTexture::render(int x, int y, int w, int h)
+void LTexture::render(int x, int y, int w = -1, int h = -1)
 {
 	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, w, h };
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+
+	//Checks the rendering dimensions
+	if (w != -1 && h != -1)
+	{
+		renderQuad.w = w;
+		renderQuad.h = h;
+	}
+
 	SDL_RenderCopy(gRenderer, mTexture, nullptr, &renderQuad);
 }
 
@@ -218,6 +229,14 @@ bool loadMedia()
 	//Loading success flag
 	bool success = true;
 
+	//Load music
+	gMusic = Mix_LoadMUS("Sound_effects_and_music/beat.wav");
+	if (gMusic == nullptr)
+	{
+		printf("Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
 	//Load Fox texture
 	if (!gFoxTexture.loadFromFile("Forest_Spirits_Image/foxcartoon.png"))
 	{
@@ -232,14 +251,6 @@ bool loadMedia()
 		success = false;
 	}
 
-	//Load music
-	gMusic = Mix_LoadMUS("Sound_effects_and_music/beat.wav");
-	if (gMusic == nullptr)
-	{
-		printf("Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError());
-		success = false;
-	}
-	
 	return success;
 }
 
@@ -300,59 +311,30 @@ int main(int argc, char* args[])
 					{
 						quit = true;
 					}
-					//Testing music key press
-					else if (e.type == SDL_KEYDOWN)
-					{
-						switch (e.key.keysym.sym)
-						{
-						case SDLK_9:
-							//If there is no music playing
-							if (Mix_PlayingMusic()== 0)
-							{
-								//Play the music
-								Mix_PlayMusic(gMusic, -1);
-							}
-							//If the music is being played
-							else
-							{
-								//If the music is paused
-								if (Mix_PausedMusic()==1)
-								{
-									//Resume the music
-									Mix_ResumeMusic();
-								}
-								//if the music is playing
-								else
-								{
-									//Pause the music
-									Mix_PauseMusic();
-								}
-							}
-							break;
 
-						case SDLK_0:
-							//Stop the music
-							Mix_HaltMusic();
-							break;
-						}
-					}
 					// Handle mouse events
-					if (e.type == SDL_MOUSEBUTTONDOWN)
-					{
-						int mouseX, mouseY;
-						SDL_GetMouseState(&mouseX, &mouseY);
-						if (mouseX >= foxPosX && mouseX < foxPosX + gFoxTexture.getWidth() && mouseY >= foxPosX && mouseY < foxPosY + gFoxTexture.getHeight())
-						{
-							printf("The fox image has been clicked down!\n");
-						}
-					}
-					else if (e.type == SDL_MOUSEBUTTONUP)
+					else if (e.type == SDL_MOUSEBUTTONDOWN)
 					{
 						int mouseX, mouseY;
 						SDL_GetMouseState(&mouseX, &mouseY);
 						if (mouseX >= foxPosX && mouseX < foxPosX + gFoxTexture.getWidth() &&
-							mouseY >= foxPosY && mouseY < foxPosY + gFoxTexture.getHeight()) {
-							printf("The fox image has been released!\n");
+							mouseY >= foxPosX && mouseY < foxPosY + gFoxTexture.getHeight())
+						{
+							if (!gIsMusicPlaying)
+							{
+								Mix_PlayMusic(gMusic, -1);
+								gIsMusicPlaying = true;
+								printf("The fox is being clicked on!\n");
+							}
+						}
+					}
+					else if (e.type == SDL_MOUSEBUTTONUP)
+					{
+						if (gIsMusicPlaying)
+						{
+							Mix_HaltMusic();
+							gIsMusicPlaying = false;
+							printf("The fox has been released!\n");
 						}
 					}
 				}
@@ -377,4 +359,4 @@ int main(int argc, char* args[])
 	close();
 
 	return 0;
-}
+};
