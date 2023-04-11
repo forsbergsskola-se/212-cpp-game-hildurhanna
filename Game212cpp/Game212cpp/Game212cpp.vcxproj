@@ -105,6 +105,8 @@
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(SolutionDir)ext\SDL2-2.26.4\lib\x86\SDL2.dll" "$(TargetDir)SDL2.dll"
+copy /Y "$(SolutionDir)ext\SDL2_mixer-2.6.3\lib\x86\SDL2_mixer.dll" "$(TargetDir)SDL2_mixer.dll"
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -126,6 +128,8 @@
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(SolutionDir)ext\SDL2-2.26.4\lib\x86\SDL2.dll" "$(TargetDir)SDL2.dll"
+copy /Y "$(SolutionDir)ext\SDL2_mixer-2.6.3\lib\x86\SDL2_mixer.dll" "$(TargetDir)SDL2_mixer.dll"
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

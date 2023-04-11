@@ -64,6 +64,9 @@ SDL_Renderer* gRenderer = nullptr;
 LTexture gFoxTexture;
 LTexture gNatureBackgroundTexture;
 
+//The music that will be played
+Mix_Music *gMusic = nullptr;
+
 
 LTexture::LTexture()
 {
@@ -155,7 +158,7 @@ bool init()
 	bool success = true;
 
 	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		success = false;
@@ -196,6 +199,13 @@ bool init()
 					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
+
+				//Initialize SDL_mixer
+				if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+					success = false;
+				}
 			}
 		}
 	}
@@ -208,10 +218,10 @@ bool loadMedia()
 	//Loading success flag
 	bool success = true;
 
-	//Load Foo' texture
+	//Load Fox texture
 	if (!gFoxTexture.loadFromFile("Forest_Spirits_Image/foxcartoon.png"))
 	{
-		printf("Failed to load Foo' texture image!\n");
+		printf("Failed to load Fox texture image!\n");
 		success = false;
 	}
 
@@ -219,6 +229,14 @@ bool loadMedia()
 	if (!gNatureBackgroundTexture.loadFromFile("Background_Image/nature_background.png"))
 	{
 		printf("Failed to load background texture image!\n");
+		success = false;
+	}
+
+	//Load music
+	gMusic = Mix_LoadMUS("Sound_effects_and_music/beat.wav");
+	if (gMusic == nullptr)
+	{
+		printf("Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError());
 		success = false;
 	}
 	
@@ -231,6 +249,10 @@ void close()
 	gFoxTexture.free();
 	gNatureBackgroundTexture.free();
 
+	//Free the music
+	Mix_FreeMusic(gMusic);
+	gMusic = nullptr;
+
 	//Destroy window	
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
@@ -238,6 +260,7 @@ void close()
 	gRenderer = nullptr;
 
 	//Quit SDL subsystems
+	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -276,6 +299,42 @@ int main(int argc, char* args[])
 					if (e.type == SDL_QUIT)
 					{
 						quit = true;
+					}
+					//Testing music key press
+					else if (e.type == SDL_KEYDOWN)
+					{
+						switch (e.key.keysym.sym)
+						{
+						case SDLK_9:
+							//If there is no music playing
+							if (Mix_PlayingMusic()== 0)
+							{
+								//Play the music
+								Mix_PlayMusic(gMusic, -1);
+							}
+							//If the music is being played
+							else
+							{
+								//If the music is paused
+								if (Mix_PausedMusic()==1)
+								{
+									//Resume the music
+									Mix_ResumeMusic();
+								}
+								//if the music is playing
+								else
+								{
+									//Pause the music
+									Mix_PauseMusic();
+								}
+							}
+							break;
+
+						case SDLK_0:
+							//Stop the music
+							Mix_HaltMusic();
+							break;
+						}
 					}
 					// Handle mouse events
 					if (e.type == SDL_MOUSEBUTTONDOWN)
