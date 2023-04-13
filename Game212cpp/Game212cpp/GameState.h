@@ -4,8 +4,14 @@
 
 class GameState : public State
 {
-	virtual void handleEvents() override;
-	virtual void updates() override;
+public:
+
+	GameState();
+	~GameState();
+
+	virtual void update() override;
 	virtual void render() override;
+	virtual void onButtonMouseDown() override;
+	virtual void onButtonMouseUp() override;
 };
 

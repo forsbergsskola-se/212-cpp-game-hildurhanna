@@ -4,11 +4,14 @@
 
 class EndState : public State
 {
+public:
+
 	EndState();
 	~EndState();
 
-	virtual void handleEvents() override;
-	virtual void updates() override;
+	virtual void update() override;
 	virtual void render() override;
+	virtual void onButtonMouseDown() override;
+	virtual void onButtonMouseUp() override;
 };
 

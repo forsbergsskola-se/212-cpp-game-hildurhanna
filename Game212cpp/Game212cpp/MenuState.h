@@ -4,8 +4,14 @@
 
 class MenuState : public State
 {
-	virtual void handleEvents() override;
-	virtual void updates() override;
+public:
+
+	MenuState();
+	~MenuState();
+
+	virtual void update() override;
 	virtual void render() override;
+	virtual void onButtonMouseDown() override;
+	virtual void onButtonMouseUp() override;
 };
 
