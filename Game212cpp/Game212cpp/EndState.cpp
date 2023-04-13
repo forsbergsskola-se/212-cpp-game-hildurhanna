@@ -1,17 +1,26 @@
 #include "EndState.h"
 
+EndState::EndState()
+{
+}
+
 EndState::~EndState()
 {
 }
 
-void EndState::handleEvents()
-{
-}
 
-void EndState::updates()
+void EndState::update()
 {
 }
 
 void EndState::render()
+{
+}
+
+void EndState::onButtonMouseDown()
+{
+}
+
+void EndState::onButtonMouseUp()
 {
 }
