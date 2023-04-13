@@ -2,10 +2,13 @@
 
 class State
 {
+public:
+
 	State() {}
 	virtual ~State() {}
-	virtual void handleEvents() = 0;
-	virtual void updates() = 0;
+	virtual void update() = 0;
 	virtual void render() = 0;
+	virtual void onButtonMouseDown() = 0;
+	virtual void onButtonMouseUp() = 0;
 };
 
