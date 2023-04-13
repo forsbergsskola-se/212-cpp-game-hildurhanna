@@ -179,6 +179,7 @@ copy /Y "$(SolutionDir)ext\SDL2_ttf-2.20.2\lib\x64\SDL2_ttf.dll" "$(TargetDir)SD
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Singleton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
