@@ -1,3 +1,6 @@
+#include "Application.h"
+
+/*
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -438,14 +441,12 @@ void handleEvents()
 						{
 							Mix_PlayMusic(gMusic, -1);
 							gIsMusicPlaying = true;
-						//	printf("The fox is being clicked on!\n");
-
+						
 							//Start the timer here
 							timerIncrement = true;
 						}
 					}
 					
-
 					break;
 				}
 
@@ -519,8 +520,6 @@ void update()
 	{
 		if (timerIncrement)
 			timer += deltaTime;
-
-	
 	}
 
 	else if (CurrentState == State::END_STATE)
@@ -586,9 +585,21 @@ void render()
 
 	SDL_RenderPresent(gRenderer);
 }
+*/
 
 int main(int argc, char* args[])
 {
+	Application::Initialize();
+
+	if (Application::GetInstance().init())
+	{
+		Application::GetInstance().run();
+		Application::GetInstance().close();
+	}
+
+	Application::Deinitialize();
+
+	/*
 	//Start up SDL and create window
 	if (!init())
 	{
@@ -619,6 +630,7 @@ int main(int argc, char* args[])
 
 	//Free resources and close SDL
 	close();
+	*/
 
 	return 0;
 };
