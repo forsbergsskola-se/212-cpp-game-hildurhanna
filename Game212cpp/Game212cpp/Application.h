@@ -28,6 +28,11 @@ private:
 	//The window renderer
 	SDL_Renderer* renderer = nullptr;
 
+	State* currentState = nullptr;
+	State* menuState = nullptr;
+	State* gameState = nullptr;
+	State* endState = nullptr;
+
 	bool running = true;
 
 };

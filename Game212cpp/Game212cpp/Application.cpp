@@ -1,5 +1,9 @@
 #include "Application.h"
 
+#include "MenuState.h"
+#include "GameState.h"
+#include "EndState.h"
+
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
@@ -63,6 +67,11 @@ bool Application::init()
 		return false;
 	}
 
+	menuState = new MenuState;
+	gameState = new GameState;
+	endState = new EndState;
+	currentState = menuState;
+
 	return true;
 }
 
@@ -79,6 +88,10 @@ void Application::run()
 
 void Application::close()
 {
+	delete endState;
+	delete gameState;
+	delete menuState;
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	Mix_Quit();
@@ -102,6 +115,22 @@ void Application::handleEvents()
 				break;
 			}
 
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				if (currentState)
+					currentState->handleEvents();
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONUP:
+			{
+				if (currentState)
+					currentState->handleEvents();
+
+				break;
+			}
+
 			default:
 				break;
 		}
@@ -110,8 +139,12 @@ void Application::handleEvents()
 
 void Application::update()
 {
+	if (currentState)
+		currentState->update();
 }
 
 void Application::render()
 {
+	if (currentState)
+		currentState->render();
 }
