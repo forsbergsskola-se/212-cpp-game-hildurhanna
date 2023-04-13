@@ -1,15 +1,16 @@
 #pragma once
 
 #include <SDL.h>
+#include <string>
 
 class Texture
 {
 public:
 	//Initializes variables
-	LTexture();
+	Texture();
 
 	//Deallocates memory
-	~LTexture();
+	~Texture();
 
 	//Loads image at specified path
 	bool loadFromFile(std::string path);
