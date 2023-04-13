@@ -1,5 +1,3 @@
-
-//Using SDL, SDL_image, standard IO, and strings
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -68,6 +66,7 @@ private:
 	int mHeight;
 };
 
+
 //Starts up SDL and creates window
 bool init();
 
@@ -87,8 +86,6 @@ TTF_Font* gFont = nullptr;
 //Rendered  fonttexture
 LTexture gMenuInfoTexture;
 LTexture gEndTexture;
-
-
 
 //The window renderer
 SDL_Renderer* gRenderer = nullptr;
@@ -204,7 +201,7 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
 
 	//Render text surface
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
-	if (textSurface == NULL)
+	if (textSurface == nullptr)
 	{
 		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
@@ -212,7 +209,7 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
 	{
 		//Create texture from surface pixels
 		mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
-		if (mTexture == NULL)
+		if (mTexture == nullptr)
 		{
 			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
 		}
@@ -237,7 +234,7 @@ bool init()
 	bool success = true;
 
 	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) )
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		success = false;
@@ -252,7 +249,7 @@ bool init()
 
 		//Create window
 		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (gWindow == NULL)
+		if (gWindow == nullptr)
 		{
 			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 			success = false;
@@ -331,7 +328,7 @@ bool loadMedia()
 	}
 
 	//Load Fox texture
-	if (!gFoxTexture.loadFromFile("Forest_Spirits_Image/foxcartoon.png"))
+	if (!gFoxTexture.loadFromFile("Images/foxcartoon.png"))
 	{
 		printf("Failed to load foxcartoon.png texture image!\n");
 		success = false;
@@ -341,21 +338,21 @@ bool loadMedia()
 	foxPosY = SCREEN_HEIGHT	/ 2;
 
 	//Load background texture
-	if (!gNatureBackgroundTexture.loadFromFile("Background_Image/nature_background.png"))
+	if (!gNatureBackgroundTexture.loadFromFile("Images/nature_background.png"))
 	{
 		printf("Failed to load background texture image!\n");
 		success = false;
 	}
 
 	//Load background texture
-	if (!gEndFoxLeftTopTexture.loadFromFile("Forest_Spirits_Image/fox2.png"))
+	if (!gEndFoxLeftTopTexture.loadFromFile("Images/fox2.png"))
 	{
 		printf("Failed to load fox.png texture image!\n");
 		success = false;
 	}
 
 	//Load background texture
-	if (!gEndFoxRightBottomTexture.loadFromFile("Forest_Spirits_Image/fox.png"))
+	if (!gEndFoxRightBottomTexture.loadFromFile("Images/fox.png"))
 	{
 		printf("Failed to load fox.png texture image!\n");
 		success = false;
@@ -372,7 +369,7 @@ void close()
 
 	//Free global font
 	TTF_CloseFont(gFont);
-	gFont = NULL;
+	gFont = nullptr;
 
 	//Free the music
 	Mix_FreeMusic(gMusic);
@@ -564,10 +561,6 @@ void render()
 
 			//Render Fox to the screen
 			gFoxTexture.render(foxPosX, foxPosY);
-
-		//	SDL_Rect FoxQuad = {foxPosX, foxPosY, gFoxTexture.getWidth(), gFoxTexture.getHeight()};
-		//	SDL_SetRenderDrawColor(gRenderer, 200, 0, 0, 255);
-		//	SDL_RenderFillRect(gRenderer, &FoxQuad);
 
 			break;
 		}
