@@ -1,5 +1,4 @@
 
-
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL.h>
 #include <SDL_image.h>
@@ -78,8 +77,6 @@ bool loadMedia();
 //Frees media and shuts down SDL
 void close();
 
-void resetTimer();
-
 
 //The window we'll be rendering to
 SDL_Window* gWindow = nullptr;
@@ -89,8 +86,8 @@ TTF_Font* gFont = nullptr;
 
 //Rendered  fonttexture
 LTexture gMenuInfoTexture;
-LTexture gStartTexture;
 LTexture gEndTexture;
+
 
 
 //The window renderer
@@ -318,7 +315,7 @@ bool loadMedia()
 	{
 		//Render text
 		SDL_Color textColor = { 0, 0, 0 };
-		if (!gMenuInfoTexture.loadFromRenderedText("Start the game with a mouse click!", textColor))
+		if (!gMenuInfoTexture.loadFromRenderedText("Start the game by clicking on the screen, or exit the game by the 'X' icon", textColor))
 		{
 			printf("Failed to render text texture!\n");
 			success = false;
@@ -394,7 +391,13 @@ void close()
 	SDL_Quit();
 }
 
-void HandleEvents()
+void resetTimer()
+{
+	timer = 0.0f;
+	timerIncrement = false;
+}
+
+void handleEvents()
 {
 	SDL_Event e;
 
@@ -477,12 +480,10 @@ void HandleEvents()
 					{
 						Mix_HaltMusic();
 						gIsMusicPlaying = false;
-					//	printf("The fox has been released!\n");
 
 						// Generate the end texture
 						SDL_Color textColor = { 0, 0, 0 };
-						gEndTexture.loadFromRenderedText("You managed to hold the mouse pointer for " + std::to_string((int)timer) + " seconds", textColor);
-
+						gEndTexture.loadFromRenderedText("You managed to hold the mouse pointer for " + std::to_string((int)timer) + " seconds.", textColor);
 						//Stop the timer
 						timerIncrement = false;
 
@@ -510,13 +511,7 @@ void HandleEvents()
 	}
 }
 
-void resetTimer()
-{
-	timer = 0.0f;
-	timerIncrement = false;
-}
-
-void Update() 
+void update() 
 {
 	lastTime = currentTime;
 	currentTime = SDL_GetTicks();
@@ -528,7 +523,7 @@ void Update()
 		if (timerIncrement)
 			timer += deltaTime;
 
-	//	printf("timer: %f\n", timer);
+	
 	}
 
 	else if (CurrentState == State::END_STATE)
@@ -538,11 +533,10 @@ void Update()
 		sinus = sinf(lifetime * 4.0f);
 		cosinus = cosf(lifetime * 4.0f);
 
-		printf("sinus: %f\n", sinus);
 	}
 }
 
-void Render()
+void render()
 {
 	SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 	SDL_RenderClear(gRenderer);
@@ -584,7 +578,7 @@ void Render()
 			// Render the stuff for the end state (some text etc?)
 
 			gEndTexture.render((SCREEN_WIDTH - gEndTexture.getWidth()) / 2, (SCREEN_HEIGHT - gEndTexture.getHeight()) / 2);
-
+			
 			const Uint32 flip = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL;
 
 			gEndFoxLeftTopTexture.render(-gEndFoxLeftTopTexture.getWidth() + (cosinus * 300.0f), -gEndFoxLeftTopTexture.getHeight() + (cosinus * 300.0f));
@@ -623,9 +617,9 @@ int main(int argc, char* args[])
 			//While application is running
 			while (running)
 			{
-				HandleEvents();
-				Update();
-				Render();
+				handleEvents();
+				update();
+				render();
 			}
 		}
 	}
