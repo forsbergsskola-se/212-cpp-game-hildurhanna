@@ -1,5 +1,9 @@
 #include "Application.h"
 
+#include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
+
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
@@ -18,6 +22,28 @@ bool Application::init()
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+		return false;
+	}
+
+	//Initialize PNG loading
+	int imgFlags = IMG_INIT_PNG;
+	if (!(IMG_Init(imgFlags) & imgFlags))
+	{
+		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+		return false;
+	}
+
+	//Initialize SDL_ttf
+	if (TTF_Init() == -1)
+	{
+		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		return false;
+	}
+
+	//Initialize SDL_mixer
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		return false;
 	}
 
@@ -53,6 +79,12 @@ void Application::run()
 
 void Application::close()
 {
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	Mix_Quit();
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
 }
 
 void Application::handleEvents()
