@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Singleton.h"
+#include "State.h"
 
 #include <SDL.h>
 
