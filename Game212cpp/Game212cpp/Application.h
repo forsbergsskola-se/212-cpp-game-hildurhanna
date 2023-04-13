@@ -22,10 +22,12 @@ public:
 private:
 
 	//The window we'll be rendering to
-	SDL_Window* gWindow = nullptr;
+	SDL_Window* window = nullptr;
 
 	//The window renderer
-	SDL_Renderer* gRenderer = nullptr;
+	SDL_Renderer* renderer = nullptr;
+
+	bool running = true;
 
 };
 
