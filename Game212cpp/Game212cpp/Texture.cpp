@@ -1,6 +1,9 @@
 #include "Texture.h"
 
+#include "Application.h"
+
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 Texture::Texture()
 {
@@ -30,7 +33,7 @@ bool Texture::loadFromFile(std::string path)
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 
 		//Create texture from surface pixels
-		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+		newTexture = SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), loadedSurface);
 		if (newTexture == nullptr)
 		{
 			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
@@ -53,23 +56,71 @@ bool Texture::loadFromFile(std::string path)
 
 bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 {
-    return false;
+	//Get rid of preexisting texture
+	free();
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid(Application::GetInstance().GetFont(), textureText.c_str(), textColor);
+	if (textSurface == nullptr)
+	{
+		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else
+	{
+		//Create texture from surface pixels
+		mTexture = SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), textSurface);
+		if (mTexture == nullptr)
+		{
+			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			//Get image dimensions
+			mWidth = textSurface->w;
+			mHeight = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface(textSurface);
+	}
+
+	//Return success
+	return mTexture != nullptr;
 }
 
 void Texture::free()
 {
+	//Free texture if it exists
+	if (mTexture != nullptr)
+	{
+		SDL_DestroyTexture(mTexture);
+		mTexture = nullptr;
+		mWidth = 0;
+		mHeight = 0;
+	}
 }
 
 void Texture::render(int x, int y, int w, int h)
 {
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+
+	//Checks the rendering dimensions
+	if (w != -1 && h != -1)
+	{
+		renderQuad.w = w;
+		renderQuad.h = h;
+	}
+
+	SDL_RenderCopy(Application::GetInstance().GetRenderer(), mTexture, nullptr, &renderQuad);
 }
 
 int Texture::getWidth()
 {
-    return 0;
+	return mWidth;
 }
 
 int Texture::getHeight()
 {
-    return 0;
+	return mHeight;
 }

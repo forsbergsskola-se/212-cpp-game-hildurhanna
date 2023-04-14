@@ -8,10 +8,6 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
-
 Application::Application()
 {
 }
@@ -52,7 +48,7 @@ bool Application::init()
 	}
 
 	//Create window
-	window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
 	if (!window)
 	{
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
@@ -64,6 +60,17 @@ bool Application::init()
 	if (!renderer)
 	{
 		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+		return false;
+	}
+
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+	//Open the font
+	font = TTF_OpenFont("Font/Boba_Cups.ttf", 28);
+	if (!font)
+	{
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+
 		return false;
 	}
 
@@ -92,6 +99,11 @@ void Application::close()
 	delete gameState;
 	delete menuState;
 
+	endTexture.free();
+
+	TTF_CloseFont(font);
+	font = nullptr;
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	Mix_Quit();
@@ -118,7 +130,7 @@ void Application::handleEvents()
 			case SDL_MOUSEBUTTONDOWN:
 			{
 				if (currentState)
-					currentState->handleEvents();
+					currentState->onButtonMouseDown();
 
 				break;
 			}
@@ -126,7 +138,7 @@ void Application::handleEvents()
 			case SDL_MOUSEBUTTONUP:
 			{
 				if (currentState)
-					currentState->handleEvents();
+					currentState->onButtonMouseUp();
 
 				break;
 			}
@@ -139,12 +151,28 @@ void Application::handleEvents()
 
 void Application::update()
 {
+	lastTime = currentTime;
+	currentTime = SDL_GetTicks();
+	deltaTime = (currentTime - lastTime) * 0.001;
+	lifeTime += deltaTime;
+
 	if (currentState)
-		currentState->update();
+		currentState->update(deltaTime);
 }
 
 void Application::render()
 {
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderClear(renderer);
+
 	if (currentState)
 		currentState->render();
+
+	SDL_RenderPresent(renderer);
+}
+
+void Application::GenerateEndTexture(const float timer)
+{
+	SDL_Color textColor = { 0, 0, 0 };
+	endTexture.loadFromRenderedText("You managed to hold the mouse pointer for " + std::to_string((int)timer) + " seconds.", textColor);
 }
