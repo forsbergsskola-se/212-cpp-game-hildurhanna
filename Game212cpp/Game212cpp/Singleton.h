@@ -13,8 +13,8 @@ class CSingleton
 {
 protected:
 
-			 CSingleton			(void) {s_pInstance = (T*)this;}
-	virtual ~CSingleton			(void) {s_pInstance = nullptr;}
+	CSingleton(void) { s_pInstance = (T*)this; }
+	virtual ~CSingleton(void) { s_pInstance = nullptr; }
 
 public:
 
@@ -22,11 +22,11 @@ public:
 	* Initializes the singleton by constructing an instance of the given data type
 	* Asserting if the instance is already initialized
 	*/
-	static void	InitSingleton		(void)
+	static void	InitSingleton(void)
 	{
-	#ifdef _DEBUG
+#ifdef _DEBUG
 		assert(!s_pInstance);
-	#endif
+#endif
 
 		new T;
 	}
@@ -35,11 +35,11 @@ public:
 	* Deinitializes the singleton by destroying the instance
 	* Asserting if the instance is not valid (i.e not initialized)
 	*/
-	static void	DeinitSingleton	(void)
+	static void	DeinitSingleton(void)
 	{
-	#ifdef _DEBUG
+#ifdef _DEBUG
 		assert(s_pInstance);
-	#endif
+#endif
 
 		delete s_pInstance;
 	}
@@ -49,11 +49,11 @@ public:
 	* Asserting if the instance is not valid (i.e not initialized)
 	* \return A reference to the instance
 	*/
-	static T&	GetInstance		(void)
+	static T& GetInstance(void)
 	{
-	#ifdef _DEBUG
+#ifdef _DEBUG
 		assert(s_pInstance);
-	#endif
+#endif
 
 		return *s_pInstance;
 	}

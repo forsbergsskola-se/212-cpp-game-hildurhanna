@@ -4,8 +4,8 @@
 
 MenuState::MenuState()
 {
-	SDL_Color textColor = { 0, 0, 0 };
-	menuInfoTexture.loadFromRenderedText("Start the game by clicking on the screen, or exit the game by the 'X' icon", textColor);
+	SDL_Color textColor = { 0, 0, 0, 0 };
+	menuInfoTexture.loadFromRenderedText("Start the game by clicking on the screen, or exit the game by the 'X' icon.", textColor);
 }
 
 MenuState::~MenuState()
