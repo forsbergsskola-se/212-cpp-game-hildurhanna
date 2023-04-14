@@ -2,7 +2,7 @@
 
 int main(int argc, char* args[])
 {
-	Application::Initialize();
+	Application::InitSingleton();
 
 	if (Application::GetInstance().init())
 	{
@@ -10,7 +10,7 @@ int main(int argc, char* args[])
 		Application::GetInstance().close();
 	}
 
-	Application::Deinitialize();
+	Application::DeinitSingleton();
 
 	return 0;
 };

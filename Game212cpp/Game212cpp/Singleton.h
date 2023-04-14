@@ -22,7 +22,7 @@ public:
 	* Initializes the singleton by constructing an instance of the given data type
 	* Asserting if the instance is already initialized
 	*/
-	static void	Initialize		(void)
+	static void	InitSingleton		(void)
 	{
 	#ifdef _DEBUG
 		assert(!s_pInstance);
@@ -35,7 +35,7 @@ public:
 	* Deinitializes the singleton by destroying the instance
 	* Asserting if the instance is not valid (i.e not initialized)
 	*/
-	static void	Deinitialize	(void)
+	static void	DeinitSingleton	(void)
 	{
 	#ifdef _DEBUG
 		assert(s_pInstance);
