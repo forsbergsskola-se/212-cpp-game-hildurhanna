@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Music">
+      <UniqueIdentifier>{3773ffdf-35c1-4a1c-8631-14f956a8c18b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -56,5 +59,10 @@
     <ClInclude Include="EndState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Music\What_Does_The_Fox_Say_Loop3.ogg">
+      <Filter>Music</Filter>
+    </None>
   </ItemGroup>
 </Project>

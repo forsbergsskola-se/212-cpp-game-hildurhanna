@@ -8,7 +8,7 @@ GameState::GameState()
 	natureBackgroundTexture.loadFromFile("Images/nature_background.png");
 	rulesTexture.loadFromFile("Images/rules.png");
 
-	music = Mix_LoadMUS("Music/What_Does_The_Fox_Say.ogg");
+	music = Mix_LoadMUS("Music/What_Does_The_Fox_Say_Loop3.ogg");
 
 	foxPosX = (Application::GetInstance().getWindowWidth() / 2) + 30;
 	foxPosY = (Application::GetInstance().getWindowHeight() / 2) + 20;
