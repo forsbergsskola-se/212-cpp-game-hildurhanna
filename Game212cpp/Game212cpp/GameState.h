@@ -13,8 +13,8 @@ public:
 
 	virtual void update(const float deltaTime) override;
 	virtual void render() override;
-	virtual void onButtonMouseDown() override;
-	virtual void onButtonMouseUp() override;
+	virtual void onMouseButtonDown() override;
+	virtual void onMouseButtonUp() override;
 
 private:
 	Texture foxTexture;

@@ -23,11 +23,11 @@ void MenuState::render()
 	menuInfoTexture.render((Application::GetInstance().getWindowWidth() - menuInfoTexture.getWidth()) / 2, (Application::GetInstance().getWindowHeight() - menuInfoTexture.getHeight()) / 2, menuInfoTexture.getWidth(), menuInfoTexture.getHeight());
 }
 
-void MenuState::onButtonMouseDown()
+void MenuState::onMouseButtonDown()
 {
 	Application::GetInstance().SetState(Application::GetInstance().GetGameState());
 }
 
-void MenuState::onButtonMouseUp()
+void MenuState::onMouseButtonUp()
 {
 }

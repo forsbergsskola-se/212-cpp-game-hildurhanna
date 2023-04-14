@@ -42,7 +42,7 @@ void GameState::render()
 	foxTexture.render(foxPosX, foxPosY, foxTexture.getWidth(), foxTexture.getHeight());
 }
 
-void GameState::onButtonMouseDown()
+void GameState::onMouseButtonDown()
 {
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
@@ -64,7 +64,7 @@ void GameState::onButtonMouseDown()
 	}
 }
 
-void GameState::onButtonMouseUp()
+void GameState::onMouseButtonUp()
 {
 	if (isMusicPlaying)
 	{

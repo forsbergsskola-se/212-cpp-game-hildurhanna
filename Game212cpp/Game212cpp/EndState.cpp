@@ -33,12 +33,12 @@ void EndState::render()
 	endFoxRightBottomTexture.render(windowWidth - (sinus * 300.0f), windowHeight - (sinus * 300.0f), endFoxRightBottomTexture.getWidth(), endFoxRightBottomTexture.getHeight());
 }
 
-void EndState::onButtonMouseDown()
+void EndState::onMouseButtonDown()
 {
 	Application::GetInstance().SetState(Application::GetInstance().GetMenuState());
 }
 
-void EndState::onButtonMouseUp()
+void EndState::onMouseButtonUp()
 {
 
 }

@@ -130,7 +130,7 @@ void Application::handleEvents()
 			case SDL_MOUSEBUTTONDOWN:
 			{
 				if (currentState)
-					currentState->onButtonMouseDown();
+					currentState->onMouseButtonDown();
 
 				break;
 			}
@@ -138,7 +138,7 @@ void Application::handleEvents()
 			case SDL_MOUSEBUTTONUP:
 			{
 				if (currentState)
-					currentState->onButtonMouseUp();
+					currentState->onMouseButtonUp();
 
 				break;
 			}
