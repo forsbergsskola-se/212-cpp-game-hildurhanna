@@ -83,12 +83,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)ext\SDL2-2.26.4\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ext\SDL2-2.26.4\include;$(SolutionDir)ext\SDL2_image-2.6.3\include;$(SolutionDir)ext\SDL2_mixer-2.6.3\include;$(SolutionDir)ext\SDL2_ttf-2.20.2\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)ext\SDL2-2.26.4\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)ext\SDL2-2.26.4\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ext\SDL2-2.26.4\include;$(SolutionDir)ext\SDL2_image-2.6.3\include;$(SolutionDir)ext\SDL2_mixer-2.6.3\include;$(SolutionDir)ext\SDL2_ttf-2.20.2\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)ext\SDL2-2.26.4\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
