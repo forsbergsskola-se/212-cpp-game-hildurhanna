@@ -6,6 +6,7 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
+
 Texture::Texture()
 {
 }
@@ -20,7 +21,7 @@ bool Texture::loadFromFile(std::string path)
 	free();
 
 	//The final texture
-	SDL_Texture* newTexture = nullptr;
+	auto newTexture = std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>{ nullptr, &SDL_DestroyTexture };
 
 	//Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
@@ -34,11 +35,12 @@ bool Texture::loadFromFile(std::string path)
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 
 		//Create texture from surface pixels
-		newTexture = SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), loadedSurface);
+		newTexture.reset(SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), loadedSurface));
+
 		if (newTexture == nullptr)
 		{
 			std::cout << "Unable to create texture from " << path << "! SDL Error: " << SDL_GetError() << std::endl;
-			//printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+			
 		}
 		else
 		{
@@ -52,7 +54,7 @@ bool Texture::loadFromFile(std::string path)
 	}
 
 	//Return success
-	mTexture = newTexture;
+	mTexture = std::move(newTexture);
 	return mTexture != nullptr;
 }
 
@@ -71,11 +73,11 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 	else
 	{
 		//Create texture from surface pixels
-		mTexture = SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), textSurface);
+		mTexture.reset(SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), textSurface));
 		if (mTexture == nullptr)
 		{
 			std::cout << "Unable to create texture from rendered text!! SDL_image Error: " << SDL_GetError() << std::endl;
-			//printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+			
 		}
 		else
 		{
@@ -97,7 +99,7 @@ void Texture::free()
 	//Free texture if it exists
 	if (mTexture != nullptr)
 	{
-		SDL_DestroyTexture(mTexture);
+		SDL_DestroyTexture(mTexture.get());
 		mTexture = nullptr;
 		mWidth = 0;
 		mHeight = 0;
@@ -116,7 +118,8 @@ void Texture::render(int x, int y, int w, int h)
 		renderQuad.h = h;
 	}
 
-	SDL_RenderCopy(Application::GetInstance().GetRenderer(), mTexture, nullptr, &renderQuad);
+	SDL_RenderCopy(Application::GetInstance().GetRenderer(), mTexture.get(), nullptr, &renderQuad);
+
 }
 
 int Texture::getWidth()

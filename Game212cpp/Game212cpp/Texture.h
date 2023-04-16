@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <string>
+#include <memory>
 
 class Texture
 {
@@ -30,7 +31,8 @@ public:
 
 private:
 	//The actual hardware texture
-	SDL_Texture* mTexture = nullptr; //std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> texture;
+	std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> mTexture{ nullptr, &SDL_DestroyTexture };
+
 
 	//Image dimensions
 	int mWidth = 0;

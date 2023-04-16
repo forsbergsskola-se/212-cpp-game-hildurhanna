@@ -23,7 +23,6 @@ bool Application::init()
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
 		std::cout << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
-		//printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -32,7 +31,6 @@ bool Application::init()
 	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
 		std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
-		//printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 		return false;
 	}
 
@@ -40,7 +38,6 @@ bool Application::init()
 	if (TTF_Init() == -1)
 	{
 		std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
-		//printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 		return false;
 	}
 
@@ -48,7 +45,6 @@ bool Application::init()
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		std::cout << "SDL_mixer could not be initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
-		//printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		return false;
 	}
 
@@ -57,7 +53,6 @@ bool Application::init()
 	if (!window)
 	{
 		std::cout << "Window could not be created! SDL_image Error: " << SDL_GetError() << std::endl;
-		//printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -66,7 +61,6 @@ bool Application::init()
 	if (!renderer)
 	{
 		std::cout << "Render could not be created! SDL_image Error: " << SDL_GetError() << std::endl;
-		//printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -77,9 +71,6 @@ bool Application::init()
 	if (!font)
 	{
 		std::cout << "Failed to load font! SDL_image Error: " << TTF_GetError() << std::endl;
-
-		//printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
-
 		return false;
 	}
 
