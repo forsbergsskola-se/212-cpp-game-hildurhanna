@@ -68,7 +68,6 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 	if (textSurface == nullptr)
 	{
 		std::cout << "Unable to render text surface! SDL_image Error: " << TTF_GetError() << std::endl;
-		//printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 	else
 	{
