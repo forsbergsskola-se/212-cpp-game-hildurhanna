@@ -4,6 +4,7 @@
 
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <iostream>
 
 Texture::Texture()
 {
@@ -25,7 +26,7 @@ bool Texture::loadFromFile(std::string path)
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
 	if (loadedSurface == nullptr)
 	{
-		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+		std::cout << "Unable to load image " << path << "! SDL_image Error: " << IMG_GetError() << std::endl;
 	}
 	else
 	{
@@ -36,7 +37,8 @@ bool Texture::loadFromFile(std::string path)
 		newTexture = SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), loadedSurface);
 		if (newTexture == nullptr)
 		{
-			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+			std::cout << "Unable to create texture from " << path << "! SDL Error: " << SDL_GetError() << std::endl;
+			//printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
 		else
 		{
@@ -63,7 +65,8 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 	SDL_Surface* textSurface = TTF_RenderText_Solid(Application::GetInstance().GetFont(), textureText.c_str(), textColor);
 	if (textSurface == nullptr)
 	{
-		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+		std::cout << "Unable to render text surface! SDL_image Error: " << TTF_GetError() << std::endl;
+		//printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 	else
 	{
@@ -71,7 +74,8 @@ bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 		mTexture = SDL_CreateTextureFromSurface(Application::GetInstance().GetRenderer(), textSurface);
 		if (mTexture == nullptr)
 		{
-			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+			std::cout << "Unable to create texture from rendered text!! SDL_image Error: " << SDL_GetError() << std::endl;
+			//printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
 		}
 		else
 		{

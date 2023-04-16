@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
+#include <iostream>
 
 Application::Application()
 {
@@ -21,7 +22,8 @@ bool Application::init()
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+		std::cout << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
+		//printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -29,21 +31,24 @@ bool Application::init()
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+		std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
+		//printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 		return false;
 	}
 
 	//Initialize SDL_ttf
 	if (TTF_Init() == -1)
 	{
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
+		//printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 		return false;
 	}
 
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
-		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		std::cout << "SDL_mixer could not be initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
+		//printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		return false;
 	}
 
@@ -51,7 +56,8 @@ bool Application::init()
 	window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
 	if (!window)
 	{
-		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+		std::cout << "Window could not be created! SDL_image Error: " << SDL_GetError() << std::endl;
+		//printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -59,7 +65,8 @@ bool Application::init()
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (!renderer)
 	{
-		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+		std::cout << "Render could not be created! SDL_image Error: " << SDL_GetError() << std::endl;
+		//printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -69,7 +76,9 @@ bool Application::init()
 	font = TTF_OpenFont("Font/Boba_Cups.ttf", 28);
 	if (!font)
 	{
-		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		std::cout << "Failed to load font! SDL_image Error: " << TTF_GetError() << std::endl;
+
+		//printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
 
 		return false;
 	}

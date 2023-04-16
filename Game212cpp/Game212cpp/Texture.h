@@ -30,7 +30,7 @@ public:
 
 private:
 	//The actual hardware texture
-	SDL_Texture* mTexture = nullptr;
+	SDL_Texture* mTexture = nullptr; //std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> texture;
 
 	//Image dimensions
 	int mWidth = 0;
