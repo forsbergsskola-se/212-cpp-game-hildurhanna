@@ -63,8 +63,8 @@ private:
 	int screenHeight = 720;
 
 	float deltaTime = 0.0f;
-	float currentTime = 0.0f;
-	float lastTime = 0.0f;
+	int currentTime = 0;
+	int lastTime = 0;
 	float lifeTime = 0.0f;
 
 	bool running = true;

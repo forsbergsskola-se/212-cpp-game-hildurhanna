@@ -29,8 +29,12 @@ void EndState::render()
 
 	texture.render((windowWidth - texture.getWidth()) / 2, (windowHeight - texture.getHeight()) / 2, texture.getWidth(), texture.getHeight());
 
-	endFoxLeftTopTexture.render(-endFoxLeftTopTexture.getWidth() + (cosinus * 300.0f), -endFoxLeftTopTexture.getHeight() + (cosinus * 300.0f), endFoxLeftTopTexture.getWidth(), endFoxLeftTopTexture.getHeight());
-	endFoxRightBottomTexture.render(windowWidth - (sinus * 300.0f), windowHeight - (sinus * 300.0f), endFoxRightBottomTexture.getWidth(), endFoxRightBottomTexture.getHeight());
+	int xFoxLeftTopTexture{ static_cast<int>(-endFoxLeftTopTexture.getWidth() + (cosinus * 300.0f)) };
+	int yFoxLeftTopTexture{ static_cast<int>(-endFoxLeftTopTexture.getHeight() + (cosinus * 300.0f)) };
+	int xFoxRightBottomTexture{ static_cast<int>(windowWidth - (sinus * 300.0f)) };
+	int yFoxRightBottomTexture{ static_cast<int>(windowHeight - (sinus * 300.0f)) };
+	endFoxLeftTopTexture.render(xFoxLeftTopTexture, yFoxLeftTopTexture, endFoxLeftTopTexture.getWidth(), endFoxLeftTopTexture.getHeight());
+	endFoxRightBottomTexture.render(xFoxRightBottomTexture, yFoxRightBottomTexture, endFoxRightBottomTexture.getWidth(), endFoxRightBottomTexture.getHeight());
 }
 
 void EndState::onMouseButtonDown()

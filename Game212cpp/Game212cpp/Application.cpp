@@ -153,7 +153,7 @@ void Application::update()
 {
 	lastTime = currentTime;
 	currentTime = SDL_GetTicks();
-	deltaTime = (currentTime - lastTime) * 0.001;
+	deltaTime = (currentTime - lastTime) * 0.001f;
 	lifeTime += deltaTime;
 
 	if (currentState)
