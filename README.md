@@ -9,6 +9,11 @@ The Application class is where to manages the game. It includes functions for in
 The State class is an abstract base class for different states of the game, such as the menu state, game state, and end state. Each state class inherits from the State class and implements its own update(), render(), onMouseButtonDown(), and onMouseButtonUp() functions for updating the state, rendering the state, and handling mouse button events.
 ### Texture Class
 The Texture class is a class for managing textures in the game. It includes functions for loading textures from files, rendering textures to the game screen, and freeing textures when they are no longer needed.
+## Design Patterns used
+### Singleton
+For this small project I choosed to use the Singleton Pattern. Singleton make sure that that only one instance of a class is created and provides a global point of access to that instance.  The Application class inherits from the Singleton, whith this, it will make sure that only one instance of the Application class can be created, and it provides a globally accessible point to access that instance throughout my project.   
+### State
+By using the State Pattern, I can encapsulate the behavior associated with each state in separate classes. This allows me to switch between states dynamically by changing the current state held by the application. The application can call the methods on the current state without needing to know the specifics. The State class serves as the abstract base class, that describes the methods: update, render, onMouseButtonDown, onMouseButtonUp. These methods are expected to be implemented by each state. Each specific state: MenuState, GameState, EndState, inherits from the State class and provides its own implementation of these methods. The State design let's me encapsulate the different states  in separate classes, which can be managed easily by switching between states while keeping a logical and clean interface.
 ### External Libarys 
 The code uses third-party libraries such as SDL and SDL_image for handling graphics and input events, and SDL_mixer for playing music in the game.
 ## Media
